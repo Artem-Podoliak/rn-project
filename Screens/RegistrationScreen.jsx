@@ -20,12 +20,12 @@ import { styles } from "./style.js";
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
 
-const loadApplication = async () => {
-  await Font.loadAsync({
-    "Roboto-Medium": require("./../assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Regular": require("./../assets/fonts/Roboto-Regular.ttf"),
-  });
-};
+// const loadApplication = async () => {
+//   await Font.loadAsync({
+//     "Roboto-Medium": require("./../assets/fonts/Roboto-Medium.ttf"),
+//     "Roboto-Regular": require("./../assets/fonts/Roboto-Regular.ttf"),
+//   });
+// };
 
 function RegistrationScreen() {
   const [isShowKey, setIsShowKey] = useState(false);
@@ -41,17 +41,17 @@ function RegistrationScreen() {
   };
 
   const [state, setstate] = useState(initialState);
-  const [iasReady, setIasReady] = useState(false);
+  // const [iasReady, setIasReady] = useState(false);
 
-  if (!iasReady) {
-    return (
-      <AppLoading
-        startAsync={loadApplication}
-        onFinish={() => setIasReady(true)}
-        onError={console.warn}
-      ></AppLoading>
-    );
-  }
+  // if (!iasReady) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadApplication}
+  //       onFinish={() => setIasReady(true)}
+  //       onError={console.warn}
+  //     ></AppLoading>
+  //   );
+  // }
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
