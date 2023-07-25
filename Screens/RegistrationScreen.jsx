@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import img from "./../assets/photoBg.jpg";
+import foto from "./../assets/rectangle.png";
+import { Formik } from "formik";
+import { Ionicons } from "@expo/vector-icons";
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
@@ -8,117 +12,147 @@ import {
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
+  Image,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
+import { styles } from "./style.js";
+import * as Font from "expo-font";
+import { AppLoading } from "expo";
+
+const loadApplication = async () => {
+  await Font.loadAsync({
+    "Roboto-Medium": require("./../assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Regular": require("./../assets/fonts/Roboto-Regular.ttf"),
+  });
+};
 
 function RegistrationScreen() {
+  const [isShowKey, setIsShowKey] = useState(false);
+  const keyboardHide = () => {
+    setIsShowKey(false);
+    Keyboard.dismiss();
+    setState(initialState);
+  };
+  const initialState = {
+    login: "",
+    email: "",
+    password: "",
+  };
+
+  const [state, setstate] = useState(initialState);
+  const [iasReady, setIasReady] = useState(false);
+
+  if (!iasReady) {
+    return (
+      <AppLoading
+        startAsync={loadApplication}
+        onFinish={() => setIasReady(true)}
+        onError={console.warn}
+      ></AppLoading>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("./../assets/photoBg.jpg")}
-        style={styles.image}
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.containerBloc}
-        >
-          <View style={styles.regBloc}>
-            <View></View>
-            <View style={styles.addPhoto}></View>
-            <Text style={styles.regTxt}>Реєстрація</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Логін"
-              placeholderTextColor="#BDBDBD"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Адреса електронної пошти"
-              placeholderTextColor="#BDBDBD"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Пароль"
-              placeholderTextColor="#BDBDBD"
-              keyboardType="numeric"
-              secureTextEntry={true}
-            />
-            <TouchableOpacity activeOpacity={0.7} style={styles.signUpBtn}>
-              <Text style={styles.signUpBtnTxt}>Зареєструватися</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </ImageBackground>
-    </View>
+        <ImageBackground style={styles.imgBg} source={img}>
+          <Formik style={{ marginHorizontal: 16 }}>
+            <View style={styles.box}>
+              <View style={styles.avatar}>
+                <Image source={foto} style={styles.avatarImage} />
+                {!foto ? (
+                  <TouchableOpacity
+                    style={styles.btnAddAvatar}
+                    activeOpacity={0.9}
+                  >
+                    <Ionicons name="add" size={20} color="#FF6C00" />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.btnRemoveAvatar}
+                    activeOpacity={0.9}
+                  >
+                    <Ionicons name="close" size={20} color="#E8E8E8" />
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              <View style={styles.headerRegistr}>
+                <Text style={styles.title}>Реєстрація</Text>
+              </View>
+
+              <View
+                style={{
+                  ...styles.form,
+                  marginBottom: isShowKey ? -155 : 45,
+                }}
+              >
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Логін"
+                    placeholderTextColor="#BDBDBD"
+                    onFocus={() => setIsShowKey(true)}
+                    value={state.login}
+                    onChangeText={(value) =>
+                      setstate((prevstate) => ({ ...prevstate, login: value }))
+                    }
+                  />
+                </View>
+                <View style={{ marginTop: 16 }}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Адреса електронної пошти"
+                    placeholderTextColor="#BDBDBD"
+                    onFocus={() => setIsShowKey(true)}
+                    value={state.email}
+                    onChangeText={(value) =>
+                      setstate((prevstate) => ({ ...prevstate, email: value }))
+                    }
+                  />
+                </View>
+                <View style={{ marginTop: 16 }}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Пароль"
+                    placeholderTextColor="#BDBDBD"
+                    keyboardType="numeric"
+                    secureTextEntry={true}
+                    onFocus={() => setIsShowKey(true)}
+                    value={state.password}
+                    onChangeText={(value) =>
+                      setstate((prevstate) => ({
+                        ...prevstate,
+                        password: value,
+                      }))
+                    }
+                  />
+                </View>
+
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.button}
+                  onPress={keyboardHide}
+                >
+                  <Text style={styles.buttonText}>Зареєструватися</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.bottomContainer}>
+                  <Text style={styles.bottomText}>
+                    Вже є акаунт?<Text>Увійти</Text>
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Formik>
+        </ImageBackground>
+        <StatusBar style="auto" />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    position: "relative",
-  },
-  containerBloc: {
-    flex: 1,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: "#fff",
-    marginTop: 263,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  addPhoto: {
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-    backgroundColor: "#F6F6F6",
-    position: "absolute",
-    top: -60,
-  },
-  regBloc: {
-    alignItems: "center",
-    marginHorizontal: 16,
-  },
-  regTxt: {
-    color: "#212121",
-    textAlign: "center",
-    fontSize: 30,
-    fontWeight: "500",
-    letterSpacing: 0.3,
-    marginBottom: 33,
-    marginTop: 92,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#F6F6F6",
-    backgroundColor: "#E8E8E8",
-    borderRadius: 8,
-    width: 343,
-    height: 50,
-    paddingTop: 16,
-    paddingLeft: 16,
-    paddingBottom: 15,
-    marginBottom: 16,
-  },
-  signUpBtn: {
-    width: 343,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    backgroundColor: "#FF6C00",
-    borderRadius: 100,
-    alignItems: "center",
-    marginTop: 43,
-  },
-  signUpBtnTxt: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#FFFFFF",
-  },
-});
 
 export default RegistrationScreen;
