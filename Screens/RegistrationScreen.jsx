@@ -1,9 +1,10 @@
 import { useState } from "react";
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import img from "./../assets/photoBg.jpg";
 import foto from "./../assets/rectangle.png";
 import { Formik } from "formik";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   Text,
   View,
